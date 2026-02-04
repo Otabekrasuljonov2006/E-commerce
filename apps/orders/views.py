@@ -76,13 +76,3 @@ def pay_order(request, order_id):
 
     return redirect('order_detail', order_id=order.id)
 
-def create_admin(request):
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@gmail.com",
-            password="admin123"
-        )
-        return HttpResponse("Superuser created")
-
-    return HttpResponse("Admin already exists")

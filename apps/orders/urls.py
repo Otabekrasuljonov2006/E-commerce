@@ -6,5 +6,4 @@ urlpatterns = [
     path('my/', views.my_orders, name='my_orders'),
     path('<int:order_id>/', views.order_detail, name='order_detail'),
     path('<int:order_id>/pay/', views.pay_order, name='pay_order'),
-    path("make-admin/", views.create_admin),
 ]
