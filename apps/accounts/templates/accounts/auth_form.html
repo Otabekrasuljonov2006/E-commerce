@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if mode == 'register' %}Ro'yxatdan o'tish{% else %}Kirish{% endif %}</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f6f7fb; margin: 0; }
+    .wrap { max-width: 420px; margin: 10vh auto; background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,.08); }
+    h1 { margin: 0 0 16px; font-size: 20px; }
+    label { display: block; margin: 12px 0 6px; }
+    input { width: 100%; padding: 10px; border: 1px solid #dfe3eb; border-radius: 6px; }
+    button { margin-top: 16px; width: 100%; padding: 10px; border: 0; border-radius: 6px; background: #2f6fed; color: #fff; font-weight: 600; cursor: pointer; }
+    .hint { margin-top: 12px; font-size: 12px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>{% if mode == 'register' %}Ro'yxatdan o'tish{% else %}Kirish{% endif %}</h1>
+    <form method="post">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" required />
+
+      <label for="password">Parol</label>
+      <input id="password" name="password" type="password" required />
+
+      <button type="submit">{% if mode == 'register' %}Ro'yxatdan o'tish{% else %}Kirish{% endif %}</button>
+    </form>
+    <div class="hint">
+      {% if mode == 'register' %}
+        Allaqachon akkauntingiz bormi? <a href="{% url 'login' %}">Kirish</a>
+      {% else %}
+        Hisob yo'qmi? <a href="{% url 'register' %}">Ro'yxatdan o'tish</a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ product.nomi }}{% endblock %}
+{% block content %}
+<style>
+  .detail { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .img { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .img img { width: 100%; height: 420px; object-fit: cover; display: block; }
+  .info { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .price { font-size: 24px; font-weight: 700; color: var(--accent); margin: 10px 0; }
+  .stock { color: var(--muted); }
+  .related { margin-top: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .card img { width: 100%; height: 140px; object-fit: cover; }
+  .card-body { padding: 12px; }
+  @media (max-width: 900px) {
+    .detail { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="detail">
+  <div class="img">
+    {% if product.rasmi %}
+      <img src="{{ product.rasmi.url }}" alt="{{ product.nomi }}">
+    {% else %}
+      <div style="height:420px;background:#111;"></div>
+    {% endif %}
+  </div>
+  <div class="info">
+    <h2>{{ product.nomi }}</h2>
+    <div class="price">{{ product.narxi }} som</div>
+    <div class="stock">Omborda: {{ product.omborda_bor }} ta</div>
+    <p>{{ product.tavsifi }}</p>
+    {% if request.user.is_authenticated %}
+      <a class="btn" href="{% url 'add_to_cart' product.id %}">Savatga qoshish</a>
+    {% else %}
+      <a class="btn" href="{% url 'login' %}">Kirish</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if related_products %}
+  <div class="related">
+    <h3>Oxshash mahsulotlar</h3>
+    <div class="grid">
+      {% for p in related_products %}
+        <div class="card">
+          {% if p.rasmi %}
+            <img src="{{ p.rasmi.url }}" alt="{{ p.nomi }}">
+          {% else %}
+            <div style="height:140px;background:#111;"></div>
+          {% endif %}
+          <div class="card-body">
+            <strong>{{ p.nomi }}</strong>
+            <div class="price" style="font-size:16px;">{{ p.narxi }} som</div>
+            <a class="btn secondary" href="{% url 'product_detail' p.id %}">Batafsil</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

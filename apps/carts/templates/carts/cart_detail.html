@@ -1,0 +1,55 @@
+﻿{% extends "base.html" %}
+{% block title %}Savat{% endblock %}
+{% block content %}
+<style>
+  .cart { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+  .item { display: grid; grid-template-columns: 80px 1fr 120px 120px 40px; gap: 12px; align-items: center; padding: 12px; border-bottom: 1px solid var(--line); }
+  .item img { width: 80px; height: 70px; object-fit: cover; border-radius: 8px; }
+  .qty input { width: 70px; padding: 6px; border-radius: 6px; border: 1px solid var(--line); background: #0f131a; color: var(--text); }
+  .summary { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  @media (max-width: 900px) {
+    .cart { grid-template-columns: 1fr; }
+    .item { grid-template-columns: 60px 1fr; grid-auto-rows: auto; }
+  }
+</style>
+
+<div class="cart">
+  <div class="panel">
+    <h2>Savat</h2>
+    {% if items %}
+      {% for item in items %}
+        <div class="item">
+          {% if item.product.rasmi %}
+            <img src="{{ item.product.rasmi.url }}" alt="{{ item.product.nomi }}">
+          {% else %}
+            <div style="width:80px;height:70px;background:#111;border-radius:8px;"></div>
+          {% endif %}
+          <div>
+            <strong>{{ item.product.nomi }}</strong>
+            <div class="muted">{{ item.product.category.name }}</div>
+          </div>
+          <div class="muted">{{ item.product.narxi }} som</div>
+          <form class="qty" method="post" action="{% url 'update_cart_item' item.id %}">
+            {% csrf_token %}
+            <input type="number" name="quantity" min="1" value="{{ item.number }}">
+            <button class="btn secondary" type="submit" style="margin-top:6px;">Yangilash</button>
+          </form>
+          <a class="muted" href="{% url 'remove_from_cart' item.id %}">x</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Savatingiz bosh.</p>
+    {% endif %}
+  </div>
+  <div class="summary">
+    <h3>Hisob</h3>
+    <p>Jami: <strong>{{ total }} som</strong></p>
+    {% if items %}
+      <a class="btn" href="{% url 'checkout' %}">Buyurtma berish</a>
+    {% else %}
+      <a class="btn secondary" href="{% url 'product_list' %}">Mahsulotlarga qaytish</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
